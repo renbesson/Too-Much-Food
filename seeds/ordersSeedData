@@ -1,0 +1,32 @@
+[
+    {
+        "date": '2023-02-09 16:04:42',
+        "user_id": 1,
+        "completed": true
+    },
+    {
+        "date": '2023-02-09 16:43:02',
+        "user_id": 2,
+        "completed": true
+    },
+    {
+        "date": '2023-02-09 17:14:44',
+        "user_id": 3,
+        "completed": false
+    },
+    {
+        "date": '2023-02-09 18:04:32',
+        "user_id": 1,
+        "completed": false
+    },
+    {
+        "date": '2023-02-09 18:16:42',
+        "user_id": 2,
+        "completed": false
+    },
+    {
+        "date": '2023-02-09 19:54:28',
+        "user_id": 3,
+        "completed": false
+    }
+]

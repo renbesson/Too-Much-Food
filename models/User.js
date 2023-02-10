@@ -16,12 +16,16 @@ User.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
-      type: DataTypes.STRING,
+    first_name: {
+      type: DataTypes.VARCHAR(30),
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.VARCHAR(30),
       allowNull: false,
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.VARCHAR(30),
       allowNull: false,
       unique: true,
       validate: {
@@ -29,10 +33,10 @@ User.init(
       },
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.VARCHAR(20),
       allowNull: false,
       validate: {
-        len: [8],
+        len: [8,20],
       },
     },
   },

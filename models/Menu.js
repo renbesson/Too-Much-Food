@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
-class Order extends Model {}
+class Menu extends Model {}
 
-Order.init(
+Menu.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,32 +11,28 @@ Order.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    date: {
-      type: DataTypes.TIMESTAMP,
+    item: {
+      type: DataTypes.VARCHAR(30),
       allowNull: false,
-      default: CURRENT_TIMESTAMP,
+      unique: true,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'user',
-        key: 'id',
-        unique: false
-      }
+    price: {
+      type: DataTypes.DECIMAL(4,2),
+      allowNull: false,
     },
-    completed: {
+    active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: false
-    }
+      default: true
+    },
   },
   {
     sequelize,
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: "order",
+    modelName: "menu",
   }
 );
 
-module.exports = Order;
+module.exports = Menu;
