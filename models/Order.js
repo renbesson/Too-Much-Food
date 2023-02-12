@@ -12,9 +12,9 @@ Order.init(
       autoIncrement: true,
     },
     date: {
-      type: DataTypes.TIMESTAMP,
+      type: DataTypes.DATE,
       allowNull: false,
-      default: CURRENT_TIMESTAMP,
+      defaultValue: DataTypes.NOW,
     },
     user_id: {
       type: DataTypes.INTEGER,
@@ -24,10 +24,15 @@ Order.init(
         unique: false
       }
     },
+    table_no: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: false
+    },
     completed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: false
+      defaultValue: false
     }
   },
   {

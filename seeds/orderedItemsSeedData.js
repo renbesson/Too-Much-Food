@@ -1,4 +1,6 @@
-[
+const { OrderedItems } = require('../models');
+
+const orderedItemData = [
     {
         "order_id": 1,
         "menu_id": 4,
@@ -49,4 +51,8 @@
         "menu_id": 19,
         "quantity": 1
     }
-]
+];
+
+const seedOrderedItems = () => OrderedItems.bulkCreate(orderedItemData);
+
+module.exports = seedOrderedItems;

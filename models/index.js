@@ -12,14 +12,14 @@ Order.belongsTo(User, {
   foreignKey: 'userId'
 });
 
-Order.hasMany(Menu, {
+Order.belongsToMany(Menu, {
   through: {
     model: OrderedItems,
     unique: false
   },
 });
 
-Menu.belongsTo(Order, {
+Menu.belongsToMany(Order, {
   through: {
     model: OrderedItems,
     unique: false

@@ -3,7 +3,7 @@ const sequelize = require("../config/connection");
 
 class OrderedItems extends Model {}
 
-Order.init(
+OrderedItems.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -30,7 +30,7 @@ Order.init(
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      default: 1
+      defaultValue: 1
     }
   },
   {

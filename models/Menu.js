@@ -12,7 +12,7 @@ Menu.init(
       autoIncrement: true,
     },
     item: {
-      type: DataTypes.VARCHAR(30),
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
@@ -23,7 +23,7 @@ Menu.init(
     active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: true
+      defaultValue: true
     },
   },
   {

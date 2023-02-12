@@ -1,4 +1,6 @@
-[
+const { Menu } = require('../models');
+
+const menuData = [
     {
         "item": "Nacho & Cheese",
         "price": 8.00
@@ -83,4 +85,8 @@
         "item": "Everybody Eats",
         "price": 75.00
     }
-]
+];
+
+const seedMenu = () => Menu.bulkCreate(menuData);
+
+module.exports = seedMenu;
