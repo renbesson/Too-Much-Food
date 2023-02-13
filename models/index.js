@@ -26,4 +26,5 @@ Menu.belongsToMany(Order, {
   },
 });
 
+// Exports all models
 module.exports = { User, Menu, Order, OrderedItems };
