@@ -17,24 +17,33 @@ Order.hasMany(OrderedItems, {
   onDelete: 'CASCADE'
 });
 
-// OrderedItems.belongsTo(Order, {
-//   foreignKey: 'order_id'
-// });
+OrderedItems.belongsTo(Order, {
+  foreignKey: 'order_id'
+});
 
-Order.belongsToMany(Menu, {
-  through: {
-    model: OrderedItems,
-    unique: false
-  },
+OrderedItems.belongsTo(Menu, {
   foreignKey: 'menu_id'
 });
 
-Menu.belongsToMany(Order, {
+Menu.hasMany(OrderedItems, {
+  foreignKey: 'menu_id',
+  onDelete: 'CASCADE'
+});
+
+OrderedItems.belongsTo(User, {
   through: {
-    model: OrderedItems,
+    model: Order,
     unique: false
   },
-  foreignKey: 'menu_id'
+  as: 'employee_orders'
+});
+
+User.belongsToMany(OrderedItems, {
+  through: {
+    model: Order,
+    unique: false
+  },
+  as: 'employee'
 });
 
 // Exports all models

@@ -5,7 +5,7 @@ const { OrderedItems, Menu, User, Order } = require('../../models');
 router.get('/', async (req, res) => {
   try {
     const orderedItemsData = await OrderedItems.findAll({
-    include: [{ model: Order }]
+    include: [{ model: Order }, { model: Menu }, { model: User, through: Order }]
   });
     res.status(200).json(orderedItemsData);
   } catch (err) {
