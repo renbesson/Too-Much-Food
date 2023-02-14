@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3001;
 // Set up Handlebars.js engine with custom helpers
 const hbs = exphbs.create({ helpers });
 
-const sess = {
-  secret: process.env.SESSION_SECRET,
+const newSession = {
+  secret: process.env.SECRET,
   cookie: {
     maxAge: 300000,
     httpOnly: true,
@@ -30,7 +30,7 @@ const sess = {
 };
 ``;
 
-app.use(session(sess));
+app.use(session(newSession));
 
 // Inform Express.js on which template engine to use
 app.engine("handlebars", hbs.engine);
