@@ -42,7 +42,8 @@ const signinFormHandler = async (event) => {
     if (response.ok) {
       document.location.replace("/profile");
     } else {
-      alert(response.statusText);
+      const resJson = await response.json();
+      alert(`${response.statusText}\n\n${resJson.message}`);
     }
   }
 };
