@@ -19,7 +19,7 @@ Order.belongsToMany(Menu, {
   },
 });
 
-Menu.belongsToMany(Order, {
+Menu.belongsToManygit chec(Order, {
   through: {
     model: OrderedItems,
     unique: false
