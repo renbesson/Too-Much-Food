@@ -7,7 +7,8 @@ const logout = async () => {
   if (response.ok) {
     document.location.replace("/");
   } else {
-    alert(response.statusText);
+    const resJson = await response.json();
+    alert(`${response.statusText} ${resJson.errors[0].message}`);
   }
 };
 
