@@ -30,21 +30,5 @@ Menu.hasMany(OrderedItems, {
   onDelete: 'CASCADE'
 });
 
-OrderedItems.belongsTo(User, {
-  through: {
-    model: Order,
-    unique: false
-  },
-  as: 'employee_orders'
-});
-
-User.belongsToMany(OrderedItems, {
-  through: {
-    model: Order,
-    unique: false
-  },
-  as: 'employee'
-});
-
 // Exports all models
 module.exports = { User, Menu, Order, OrderedItems };
