@@ -4,26 +4,37 @@ const Order = require('./Order');
 const OrderedItems = require('./OrderedItems');
 
 User.hasMany(Order, {
-  foreignKey: 'userId',
+  foreignKey: 'user_id',
   onDelete: 'CASCADE'
 });
 
 Order.belongsTo(User, {
-  foreignKey: 'userId'
+  foreignKey: 'user_id'
 });
+
+Order.hasMany(OrderedItems, {
+  foreignKey: 'order_id',
+  onDelete: 'CASCADE'
+});
+
+// OrderedItems.belongsTo(Order, {
+//   foreignKey: 'order_id'
+// });
 
 Order.belongsToMany(Menu, {
   through: {
     model: OrderedItems,
     unique: false
   },
+  foreignKey: 'menu_id'
 });
 
-Menu.belongsToManygit chec(Order, {
+Menu.belongsToMany(Order, {
   through: {
     model: OrderedItems,
     unique: false
   },
+  foreignKey: 'menu_id'
 });
 
 // Exports all models

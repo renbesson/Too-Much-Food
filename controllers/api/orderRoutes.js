@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const { Order, OrderedItems } = require('../../models');
+const { Menu, Order, OrderedItems, User } = require('../../models');
 
 // GET all open orders
 router.get('/', async (req, res) => {
   try {
-    const orderData = await Order.findAll();
+    const orderData = await Order.findAll({
+      // JOIN with ordered items
+      include: [{ model: User }, { model: Menu, through: OrderedItems }]
+    });
     res.status(200).json(orderData);
   } catch (err) {
     res.status(500).json(err);
@@ -16,7 +19,7 @@ router.get('/:id', async (req, res) => {
   try {
     const orderData = await Order.findByPk(req.params.id, {
       // JOIN with ordered items
-      include: [{ model: OrderedItems }, ]
+      include: [{ model: User }, { model: Menu, through: OrderedItems }]
     });
 
     if (!orderData) {
