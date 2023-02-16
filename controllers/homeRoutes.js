@@ -1,19 +1,31 @@
 const router = require("express").Router();
-const { Order, User } = require("../models");
+const { Order, User, Menu, OrderedItems } = require("../models");
 const withAuth = require("../utils/isLogged");
 
+///////////////////////////////////////////////////////////////////////////////
+// Render home page
+///////////////////////////////////////////////////////////////////////////////
 router.get("/", async (req, res) => {
+  const isLogged = req.session.isLogged;
+
   try {
     res.render("homepage", {
-      isLogged: req.session.isLogged,
+      isLogged,
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.render("error", {
+      isLogged,
+      error,
+    });
   }
 });
 
-// Use withAuth middleware to prevent access to route
+///////////////////////////////////////////////////////////////////////////////
+// Render profile page
+///////////////////////////////////////////////////////////////////////////////
 router.get("/profile", withAuth, async (req, res) => {
+  const isLogged = req.session.isLogged;
+
   try {
     // Find the logged in user based on the session ID
     const userData = await User.findByPk(req.session.user_id, {
@@ -28,12 +40,16 @@ router.get("/profile", withAuth, async (req, res) => {
       isLogged: true,
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.render("error", {
+      isLogged,
+      error,
+    });
   }
 });
-
+///////////////////////////////////////////////////////////////////////////////
+// Render login page
+///////////////////////////////////////////////////////////////////////////////
 router.get("/login", (req, res) => {
-  // If the user is already logged in, redirect the request to another route
   if (req.session.isLogged) {
     res.redirect("/profile");
     return;
@@ -43,3 +59,78 @@ router.get("/login", (req, res) => {
 });
 
 module.exports = router;
+
+///////////////////////////////////////////////////////////////////////////////
+// Gets all orders and renders orders page
+///////////////////////////////////////////////////////////////////////////////
+router.get("/orders", withAuth, async (req, res) => {
+  const isLogged = req.session.isLogged;
+
+  try {
+    const ordersData = await Order.findAll({
+      include: [{ model: User }, { model: Menu, through: OrderedItems }],
+    });
+
+    const orders = ordersData.map((order) => order.get({ plain: true }));
+
+    console.log(orders);
+
+    res.render("orders", {
+      orders,
+      isLogged,
+    });
+  } catch (error) {
+    res.render("error", {
+      isLogged,
+      error,
+    });
+  }
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// Gets all menu and renders menu page
+///////////////////////////////////////////////////////////////////////////////
+router.get("/menu", async (req, res) => {
+  const isLogged = req.session.isLogged;
+
+  try {
+    const menuData = await Menu.findAll();
+
+    const menu = menuData.map((plate) => plate.get({ plain: true }));
+
+    res.render("menu", {
+      menu,
+      isLogged,
+    });
+  } catch (error) {
+    res.render("error", {
+      isLogged,
+      error,
+    });
+  }
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// Gets all ordered items and renders reports page
+///////////////////////////////////////////////////////////////////////////////
+router.get("/report", async (req, res) => {
+  const isLogged = req.session.isLogged;
+
+  try {
+    const orderedItemsData = await OrderedItems.findAll({
+      include: [{ model: Order, include: [{ model: User }] }, { model: Menu }],
+    });
+
+    const orderedItems = orderedItemsData.map((orderedItem) => orderedItem.get({ plain: true }));
+
+    res.render("report", {
+      orderedItems,
+      isLogged,
+    });
+  } catch (error) {
+    res.render("error", {
+      isLogged,
+      error,
+    });
+  }
+});
