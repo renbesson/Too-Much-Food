@@ -3,6 +3,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Too Much Food</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.50.1/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script defer src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
     <div>
@@ -19,10 +25,29 @@
           {{#if isLogged}}
             <div>
               <a href="/profile"><button>profile</button></a>
-              <button id="logout">logout</button>
             </div>
           {{else}}
             <a href="/login">login</a>
+          {{/if}}
+        </nav>
+
+        <nav class="flex justify-between p-3">
+          <h1>
+            <a href="/" class="text-3xl mb-3">Tech Blog</a>
+          </h1>
+          {{#if isLogged}}
+            <div>
+              <button class="btn btn-primary" id="logout">logout</button>
+            </div>
+          {{else}}
+            <div>
+              <a href="/signin">
+                <button class="btn btn-primary mb-3" id="signinBtn">sign in</button>
+              </a>
+              <a href="/signup">
+                <button class="btn btn-primary" id="signupBtn">sign up</button>
+              </a>
+            </div>
           {{/if}}
         </nav>
       </header>
