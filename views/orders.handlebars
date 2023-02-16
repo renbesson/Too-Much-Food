@@ -1,5 +1,5 @@
-{{#each orders as order}}
-  <div>{{order}}</div>
+{{#each orders as |order|}}
+  <div>{{stringfy order}}</div>
 {{else}}
   <div>No orders found!</div>
 {{/each}}

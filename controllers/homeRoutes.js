@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Order, User } = require("../models");
+const { Order, User, Menu, OrderedItems } = require("../models");
 const withAuth = require("../utils/isLogged");
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,16 +56,21 @@ module.exports = router;
 router.get("/orders", withAuth, async (req, res) => {
   try {
     const ordersData = await Order.findAll({
-      // include: { model: User },
+      include: [{ model: User }, { model: Menu, through: OrderedItems }],
     });
 
-    const orders = ordersData.get({ plain: true });
+    const orders = ordersData.map((order) => order.get({ plain: true }));
+
+    console.log(orders);
 
     res.render("orders", {
-      ...orders,
-      isLogged: true,
+      orders,
+      isLogged: req.session.isLogged,
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.log(error);
+    res.render("error", {
+      error,
+    });
   }
 });
