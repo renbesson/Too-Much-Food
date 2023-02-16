@@ -22,7 +22,11 @@ const signupFormHandler = async (event) => {
       }
     }
   } catch (error) {
-    console.log(error);
+    const isLogged = req.session.isLogged;
+    res.render("error", {
+      isLogged,
+      error,
+    });
   }
 };
 
