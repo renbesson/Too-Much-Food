@@ -6,12 +6,17 @@ const withAuth = require("../utils/isLogged");
 // Render home page
 ///////////////////////////////////////////////////////////////////////////////
 router.get("/", async (req, res) => {
+  const isLogged = req.session.isLogged;
+
   try {
     res.render("homepage", {
-      isLogged: req.session.isLogged,
+      isLogged,
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.render("error", {
+      isLogged,
+      error,
+    });
   }
 });
 
@@ -19,6 +24,8 @@ router.get("/", async (req, res) => {
 // Render profile page
 ///////////////////////////////////////////////////////////////////////////////
 router.get("/profile", withAuth, async (req, res) => {
+  const isLogged = req.session.isLogged;
+
   try {
     // Find the logged in user based on the session ID
     const userData = await User.findByPk(req.session.user_id, {
@@ -33,7 +40,10 @@ router.get("/profile", withAuth, async (req, res) => {
       isLogged: true,
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.render("error", {
+      isLogged,
+      error,
+    });
   }
 });
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,9 +61,11 @@ router.get("/login", (req, res) => {
 module.exports = router;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Render orders page
+// Gets all orders and renders orders page
 ///////////////////////////////////////////////////////////////////////////////
 router.get("/orders", withAuth, async (req, res) => {
+  const isLogged = req.session.isLogged;
+
   try {
     const ordersData = await Order.findAll({
       include: [{ model: User }, { model: Menu, through: OrderedItems }],
@@ -65,11 +77,59 @@ router.get("/orders", withAuth, async (req, res) => {
 
     res.render("orders", {
       orders,
-      isLogged: req.session.isLogged,
+      isLogged,
     });
   } catch (error) {
-    console.log(error);
     res.render("error", {
+      isLogged,
+      error,
+    });
+  }
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// Gets all menu and renders menu page
+///////////////////////////////////////////////////////////////////////////////
+router.get("/menu", async (req, res) => {
+  const isLogged = req.session.isLogged;
+
+  try {
+    const menuData = await Menu.findAll();
+
+    const menu = menuData.map((plate) => plate.get({ plain: true }));
+
+    res.render("menu", {
+      menu,
+      isLogged,
+    });
+  } catch (error) {
+    res.render("error", {
+      isLogged,
+      error,
+    });
+  }
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// Gets all ordered items and renders reports page
+///////////////////////////////////////////////////////////////////////////////
+router.get("/report", async (req, res) => {
+  const isLogged = req.session.isLogged;
+
+  try {
+    const orderedItemsData = await OrderedItems.findAll({
+      include: [{ model: Order, include: [{ model: User }] }, { model: Menu }],
+    });
+
+    const orderedItems = orderedItemsData.map((orderedItem) => orderedItem.get({ plain: true }));
+
+    res.render("report", {
+      orderedItems,
+      isLogged,
+    });
+  } catch (error) {
+    res.render("error", {
+      isLogged,
       error,
     });
   }

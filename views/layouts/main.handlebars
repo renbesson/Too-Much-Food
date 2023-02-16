@@ -11,11 +11,12 @@
           <a href="/">LOGO</a>
         </h1>
         <nav>
+          <div>
+            <a href="/menu"><button>Menu</button></a>
+            <a href="/orders"><button>Orders</button></a>
+            <a href="/report"><button>Report</button></a>
+          </div>
           {{#if isLogged}}
-            <div>
-              <a href="/menu"><button>Menu</button></a>
-              <a href="/orders"><button>Orders</button></a>
-            </div>
             <div>
               <a href="/profile"><button>profile</button></a>
               <button id="logout">logout</button>
