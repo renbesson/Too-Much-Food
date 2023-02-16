@@ -2,6 +2,9 @@ const router = require("express").Router();
 const { Order, User } = require("../models");
 const withAuth = require("../utils/isLogged");
 
+///////////////////////////////////////////////////////////////////////////////
+// Render home page
+///////////////////////////////////////////////////////////////////////////////
 router.get("/", async (req, res) => {
   try {
     res.render("homepage", {
@@ -12,7 +15,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Use withAuth middleware to prevent access to route
+///////////////////////////////////////////////////////////////////////////////
+// Render profile page
+///////////////////////////////////////////////////////////////////////////////
 router.get("/profile", withAuth, async (req, res) => {
   try {
     // Find the logged in user based on the session ID
@@ -31,9 +36,10 @@ router.get("/profile", withAuth, async (req, res) => {
     res.status(500).json(error);
   }
 });
-
+///////////////////////////////////////////////////////////////////////////////
+// Render login page
+///////////////////////////////////////////////////////////////////////////////
 router.get("/login", (req, res) => {
-  // If the user is already logged in, redirect the request to another route
   if (req.session.isLogged) {
     res.redirect("/profile");
     return;
@@ -43,3 +49,23 @@ router.get("/login", (req, res) => {
 });
 
 module.exports = router;
+
+///////////////////////////////////////////////////////////////////////////////
+// Render orders page
+///////////////////////////////////////////////////////////////////////////////
+router.get("/orders", withAuth, async (req, res) => {
+  try {
+    const ordersData = await Order.findAll({
+      // include: { model: User },
+    });
+
+    const orders = ordersData.get({ plain: true });
+
+    res.render("orders", {
+      ...orders,
+      isLogged: true,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
