@@ -37,32 +37,32 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   console.log(req.body);
   Order.create(req.body)
-  .then((order) => {
-    // create pairings of menu items and quantity included in order through bulk create in the OrderedItems model
-    if (req.body.menuIds.length) {
-      console.log(req.body.qty);
-      const menuIdArr = req.body.menuIds.map((menu_id, index) => {
-        return {
-          order_id: order.id,
-          menu_id,
-          quantity: req.body.qty[index],
-        };
-      });
-      console.log(menuIdArr);
-      return OrderedItems.bulkCreate(menuIdArr);
-    }
-    // if order is empty, create empty order
-    res.status(200).json(order);
-  })
-  .then((menuIds) => res.status(200).json(menuIds))
-  .catch((err) => {
-    console.log(err);
-    res.status(400).json(err);
-  });
+    .then((order) => {
+      // create pairings of menu items and quantity included in order through bulk create in the OrderedItems model
+      if (req.body.menuIds.length) {
+        console.log(req.body.qty);
+        const menuIdArr = req.body.menuIds.map((menu_id, index) => {
+          return {
+            order_id: order.id,
+            menu_id,
+            quantity: req.body.qty[index],
+          };
+        });
+        console.log(menuIdArr);
+        return OrderedItems.bulkCreate(menuIdArr);
+      }
+      // if order is empty, create empty order
+      res.status(200).json(order);
+    })
+    .then((menuIds) => res.status(200).json(menuIds))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
 
 // UPDATE an order
-router.put('/:id', async(req, res) => {
+router.put('/:id', async (req, res) => {
   // update product data
   const orders = await Order.update(req.body, {
     where: {
@@ -76,22 +76,35 @@ router.put('/:id', async(req, res) => {
     .then((orderedItems) => {
       // get list of current menu_ids
       const orderedItemIds = orderedItems.map(({ menu_id }) => menu_id);
-      // create filtered list of new menu_ids
-      const newOrderedItems = req.body.menuIds
-        .filter((menu_id) => !orderedItemIds.includes(menu_id))
-        .map((menu_id) => {
+      const getId = orderedItems.map((post) => post.get({ plain: true }));
+      // create filtered list of existing menu_ids
+      const existingOrderedItemIds = req.body.menuIds
+        .filter((menu_id) => orderedItemIds.includes(menu_id))
+        .map((menu_id, index) => {
           return {
             order_id: req.params.id,
             menu_id,
-            quantity,
+            quantity: req.body.qty[index],
+          };
+        });
+      for (i = 0; i < existingOrderedItemIds.length; i++) {
+        OrderedItems.update(existingOrderedItemIds[i], {where: {id: JSON.stringify(getId[i].id)}});
+      };
+      // create filtered list of new menu_ids
+      const newOrderedItems = req.body.menuIds
+        .filter((menu_id) => !orderedItemIds.includes(menu_id))
+        .map((menu_id, index) => {
+          return {
+            order_id: req.params.id,
+            menu_id,
+            quantity: req.body.qty[index],
           };
         });
       // figure out which ones to remove
       const orderedItemsToRemove = orderedItems
         .filter(({ menu_id }) => !req.body.menuIds.includes(menu_id))
         .map(({ id }) => id);
-
-      // run both actions
+      // remove menu ids and create menu ids
       return Promise.all([
         OrderedItems.destroy({ where: { id: orderedItemsToRemove } }),
         OrderedItems.bulkCreate(newOrderedItems),
@@ -99,7 +112,6 @@ router.put('/:id', async(req, res) => {
     })
     .then((updatedOrderedItems) => res.json(updatedOrderedItems))
     .catch((err) => {
-      // console.log(err);
       res.status(400).json(err);
     });
 });
