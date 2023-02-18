@@ -5,7 +5,7 @@ const logout = async () => {
   });
 
   if (response.ok) {
-    document.location.replace("/");
+    document.location.replace("/signin");
   } else {
     const resJson = await response.json();
     alert(`${response.statusText} ${resJson.errors[0].message}`);

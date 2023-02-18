@@ -5,7 +5,13 @@ const { Menu } = require('../../models');
 router.get('/', async (req, res) => {
   try {
     const menuData = await Menu.findAll();
-    res.status(200).json(menuData);
+    if (req.session.isLogged) {
+      res.render("menu");
+      return;
+    }
+    res.redirect("signin");
+
+    // res.status(200).json(menuData);
   } catch (err) {
     res.status(500).json(err);
   }
