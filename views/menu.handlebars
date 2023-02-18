@@ -1,6 +1,14 @@
-{{#each menu as |plate|}}
-  <div>{{stringfy plate}}</div>
-{{else}}
-  <div>No plates found!</div>
+{{!-- create two sections --}}
+
+{{!-- left section
+include "Create New Item" button
+when clicked, the button should disappear and a form with Item Name, Price and Status (Active or Inactive in dropdown box) should display, followed by Cancel and Save buttons. --}}
+
+{{!-- right section
+on clicking the menuItem.item, the details should display in the form in the left section so it can be edited --}}
+{{#each menuItems as |menuItem|}}
+  <div>{{menuItem.item}}</div>
+  <div>{{menuItem.price}}</div>
+  <div>{{#if menuItem.active}}Active{{else}}Inactive{{/if}}</div>
 {{/each}}
 <div>{{isLogged}}</div>

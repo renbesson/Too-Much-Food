@@ -5,17 +5,22 @@ const { Menu } = require('../../models');
 router.get('/', async (req, res) => {
   try {
     const menuData = await Menu.findAll();
+    const menuItems = menuData.map((menu) => menu.get({ plain: true }));
     if (req.session.isLogged) {
-      res.render("menu");
+      res.render("menu", {
+        menuItems,
+      });
       return;
     }
-    res.redirect("signin");
+    res.redirect("../signin");
 
     // res.status(200).json(menuData);
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
+
 
 // GET a single menu item
 router.get('/:id', async (req, res) => {
