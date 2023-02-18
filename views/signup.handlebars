@@ -6,49 +6,57 @@
     </div>
     <div class="relative px-4 py-10 bg-amber-600 shadow-lg sm:rounded-3xl sm:p-20">
       <div class="max-w-md mx-auto">
-        <h2 class="text-2xl font-bold">Sign Up</h2>
+        <div>
+          <h2 class="text-2xl font-semibold">Sign Up</h2>
+        </div>
         <div class="divide-y">
-
           <form class="py-8 text-base leading-6 space-y-4 sm:leading-7">
-            <label class="block">
-              <span class="label-text">What is your first name?</span>
+            <label class="flex flex-col">
+              <span class="label-text">First Name:</span>
               <input
-                id="first_name"
+                id="f-name"
                 type="text"
-                placeholder="Nome"
+                placeholder="First Name"
                 class="input input-primary w-full max-w-xs"
               />
             </label>
-
-            <label class="block">
-              <span class="label-text">What is your last name?</span>
+            <label class="flex flex-col">
+              <span class="label-text">Last Name:</span>
               <input
-                id="last_name"
+                id="l-name"
                 type="text"
-                placeholder="Sobrenome"
+                placeholder="Last Name"
                 class="input input-primary w-full max-w-xs"
               />
             </label>
-
-            <label class="block">
-              <span class="label-text">What is your email?</span>
+            <label class="flex flex-col">
+              <span class="label-text">Email:</span>
               <input
                 id="email"
                 type="email"
-                placeholder="nome@exemplo.com.br"
+                placeholder="name@email.com"
+                class="input input-primary w-full max-w-xs"
+              />
+            </label>
+            <label class="flex flex-col">
+              <span class="label-text">Password:</span>
+              <input
+                id="password"
+                type="password"
+                placeholder="Password"
+                class="input input-primary w-full max-w-xs"
+              />
+            </label>
+            <label class="flex flex-col">
+              <span class="label-text">Re-type Password:</span>
+              <input
+                id="repassword"
+                type="password"
+                placeholder="Re-Password"
                 class="input input-primary w-full max-w-xs"
               />
             </label>
 
-            <label class="block">
-              <span class="label-text">Type a new password?</span>
-              <input
-                id="password"
-                type="password"
-                placeholder="ExemPloSenHa9#"
-                class="input input-primary w-full max-w-xs"
-              />
-            </label>
 
             <button class="btn btn-primary" id="signupButton">sign up</button>
           </form>
