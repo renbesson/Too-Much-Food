@@ -15,9 +15,8 @@ router.get("/", async (req, res) => {
       isLogged,
     });
   } catch (error) {
-    res.render("error", {
+    res.render("homepage", {
       isLogged,
-      error,
     });
   }
 });

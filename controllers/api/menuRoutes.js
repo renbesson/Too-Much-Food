@@ -1,29 +1,29 @@
 const router = require('express').Router();
-const { Menu } = require('../../models');
+const { Menu, User } = require('../../models');
+const isLogged = require('../../utils/isLogged');
 
 // GET all menu items
-router.get('/', async (req, res) => {
+router.get('/', isLogged, async (req, res) => {
+  const isLogged = req.session.isLogged;
   try {
     const menuData = await Menu.findAll();
     const menuItems = menuData.map((menu) => menu.get({ plain: true }));
-    if (req.session.isLogged) {
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+    });
+    const user = userData.get({ plain: true });
       res.render("menu", {
         menuItems,
+        ...user,
+        isLogged,
       });
-      return;
-    }
-    res.redirect("../signin");
-
-    // res.status(200).json(menuData);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-
-
 // GET a single menu item
-router.get('/:id', async (req, res) => {
+router.get('/:id', isLogged, async (req, res) => {
   try {
     const menuData = await Menu.findByPk(req.params.id);
 
