@@ -7,11 +7,8 @@ see wireframe shared for details --}}
 {{!-- right section
 on clicking the id, the details should display in the form in the left section so it can be edited --}}
 {{#each orders as |order|}}
-{{#unless completed}}
   <div>{{id}}</div>
   <div>{{date}}</div>
   <div>{{table_no}}</div>
   <div>{{user.first_name}}</div>
-{{/unless}}
-  {{!-- <div>{{#if menuItem.active}}Active{{else}}Inactive{{/if}}</div> --}}
 {{/each}}
