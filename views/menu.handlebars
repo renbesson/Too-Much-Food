@@ -1,14 +1,90 @@
-{{!-- create two sections --}}
+{{! create two sections }}
 
-{{!-- left section
+{{! left section
 include "Create New Item" button
-when clicked, the button should disappear and a form with Item Name, Price and Status (Active or Inactive in dropdown box) should display, followed by Cancel and Save buttons. --}}
+when clicked, the button should disappear and a form with Item Name, Price and Status (Active or Inactive in dropdown box) should display, followed by Cancel and Save buttons. }}
 
-{{!-- right section
-on clicking the menuItem.item, the details should display in the form in the left section so it can be edited --}}
-{{#each menuItems as |menuItem|}}
+{{! right section
+on clicking the menuItem.item, the details should display in the form in the left section so it can be edited }}
+{{!-- {{#each menuItems as |menuItem|}}
   <div>{{menuItem.item}}</div>
   <div>{{menuItem.price}}</div>
   <div>{{#if menuItem.active}}Active{{else}}Inactive{{/if}}</div>
 {{/each}}
-<div>{{isLogged}}</div>
+<div>{{isLogged}}</div> --}}
+
+<div class="grid sm:grid-cols-1 md:grid-cols-2">
+
+  <div class="md:sticky md:top-4 align-middle">
+    <div class="py-6 flex flex-col justify-center sm:py-12 md:sticky md:top-4">
+      <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-amber-700 to-amber-800 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"
+        >
+        </div>
+        <div class="relative px-4 py-10 bg-amber-600 shadow-lg sm:rounded-3xl sm:p-20">
+          <div class="max-w-md mx-auto">
+            <div>
+              <h2 class="text-2xl font-semibold">Create New Menu Item</h2>
+            </div>
+            <div class="divide-y">
+              <form class="py-8 text-base leading-6 space-y-4 sm:leading-7">
+                <label class="block">
+                  <span class="label-text">Name:</span>
+                  <input
+                    id="item"
+                    type="text"
+                    placeholder="Name"
+                    class="input input-primary w-full max-w-xs"
+                  />
+                </label>
+                <label class="block">
+                  <span class="label-text">Price:</span>
+                  <input
+                    id="price"
+                    type="number"
+                    placeholder="Price"
+                    class="input input-primary w-full max-w-xs"
+                  />
+                </label>
+                <label class="flex justify-center">
+                  <span class="label-text align-middle">Inactive</span>
+                  <input id="isActive" type="checkbox" class="toggle align-middle mx-1" />
+                  <span class="label-text align-middle">Active</span>
+                </label>
+                <div class="flex justify-evenly">
+                  <button id="createItemBtn" class="btn btn-primary">Create</button>
+                  <button {{#unless isEditing}}disabled{{/unless}} id="editItemBtn" class="btn btn-primary">Edit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1">
+    {{#each menuItems as |menuItem|}}
+      <div
+        class="card card-side glass m-3 shadow-md hover:shadow-xl"
+      >
+        <div class="card-body">
+          <h2 class="card-title text-shadow">{{menuItem.item}}</h2>
+          <p>Price: {{format_currency menuItem.price}}</p>
+          <p>Active: {{#if menuItem.active}}Yes{{else}}No{{/if}}</p>
+          <div class="card-actions justify-end">
+            <button id="edit-{{menuItem.id}}" class="btn btn-primary editBtn">Edit</button>
+            <button id="delete-{{menuItem.id}}" class="btn btn-error deleteBtn">Delete</button>
+        </div>
+        </div>
+        
+      </div>
+    {{else}}
+      <div>No plates found!</div>
+    {{/each}}
+  </div>
+
+</div>
+
+<script defer src="/js/menu.js"></script>

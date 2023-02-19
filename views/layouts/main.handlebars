@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" data-theme="myTheme">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,11 +9,11 @@
       type="text/css"
     />
     <script defer src="https://cdn.tailwindcss.com"></script>
+    <link href="/css/styles.css" rel="stylesheet" />
   </head>
   <body>
     <div>
       <header>
-
 <div class="navbar bg-base-100">
   <div class="navbar-start">
     <div class="dropdown">
@@ -62,59 +62,17 @@
               </a>&nbsp;&nbsp;
               <a class="btn" href="/signup" id="signupBtn">sign up
               </a>
-    {{/if}}
-  </div>
-</div>
-
-
-        {{!-- <nav>
-          <div>
-            <a href="/api/menu"><button>Menu</button></a>
-            <a href="/api/orders"><button>Orders</button></a>
-            <a href="/api/reports"><button>Report</button></a>
+            {{/if}}
           </div>
-          {{#if isLogged}}
-            <div>
-              <a href="/profile"><button>profile</button></a>
-            </div>
-          {{else}}
-            <a href="/login">login</a>
-          {{/if}}
-        </nav>
-
-        <nav class="flex justify-between p-3">
-          <h1>
-            <a href="/" class="text-3xl mb-3">Tech Blog</a>
-          </h1>
-          {{#if isLogged}}
-            <div>
-              <button class="btn btn-primary" id="logout">logout</button>
-            </div>
-          {{else}}
-            <div>
-              <a href="/signin">
-                <button class="btn btn-primary mb-3" id="signinBtn">sign in</button>
-              </a>
-              <a href="/signup">
-                <button class="btn btn-primary" id="signupBtn">sign up</button>
-              </a>
-            </div>
-          {{/if}}
-        </nav> --}}
-
-
-
-
-
+        </div>
       </header>
-      <main>
+      <main class="container mx-auto">
         {{{body}}}
       </main>
       <footer>
 
       </footer>
     </div>
-
     {{#if isLogged}}
       <script src="/js/logout.js"></script>
     {{/if}}
