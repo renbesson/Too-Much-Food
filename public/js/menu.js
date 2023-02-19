@@ -5,7 +5,7 @@ const createMenuItemFormHandler = async (event) => {
   const price = document.getElementById("price").value.trim();
   const active = document.getElementById("isActive").checked;
 
-  if (item && price && active) {
+  if (item && price) {
     const response = await fetch("/api/menu", {
       method: "POST",
       body: JSON.stringify({ item, price, active }),
@@ -32,17 +32,19 @@ const editItem = async (event) => {
   console.log(event.target.id);
 };
 
+////////////////////////////////////////////////////////////////////////
+// Deletes a specific item from the menu
+////////////////////////////////////////////////////////////////////////
 const deleteItem = async (event) => {
   const id = event.target.id.split("-")[1];
 
   const response = await fetch(`/api/menu/${id}`, {
     method: "DELETE",
-    body: JSON.stringify({ item, price, active }),
     headers: { "Content-Type": "application/json" },
   });
 
   if (response.ok) {
-    alert("Item created successfully!");
+    alert("Item deleted successfully!");
     location.reload();
   } else {
     const resJson = await response.json();
