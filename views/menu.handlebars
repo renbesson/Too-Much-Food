@@ -1,14 +1,36 @@
-{{!-- create two sections --}}
+{{! create two sections }}
 
-{{!-- left section
+{{! left section
 include "Create New Item" button
-when clicked, the button should disappear and a form with Item Name, Price and Status (Active or Inactive in dropdown box) should display, followed by Cancel and Save buttons. --}}
+when clicked, the button should disappear and a form with Item Name, Price and Status (Active or Inactive in dropdown box) should display, followed by Cancel and Save buttons. }}
 
-{{!-- right section
-on clicking the menuItem.item, the details should display in the form in the left section so it can be edited --}}
-{{#each menuItems as |menuItem|}}
+{{! right section
+on clicking the menuItem.item, the details should display in the form in the left section so it can be edited }}
+{{!-- {{#each menuItems as |menuItem|}}
   <div>{{menuItem.item}}</div>
   <div>{{menuItem.price}}</div>
   <div>{{#if menuItem.active}}Active{{else}}Inactive{{/if}}</div>
 {{/each}}
-<div>{{isLogged}}</div>
+<div>{{isLogged}}</div> --}}
+
+<div class="grid sm:grid-cols-1 md:grid-cols-2">
+  <div class="columns-1"><p>Create New Plate</p></div>
+  <div class="lg:columns-1 xl:columns-2">
+    {{#each menuItems as |plate|}}
+      <div
+        class="card card-side glass min-w-full mb-3 shadow-md hover:shadow-xl"
+      >
+        {{! <figure class="w-32"><img src="/images/spiderman.jpeg" alt="Album" /></figure> }}
+        <div class="card-body">
+          <h2 class="card-title text-shadow">{{plate.item}}</h2>
+          <p>Price: {{format_currency plate.price}}</p>
+          <p>Active {{#if menuItem.active}}Yes{{else}}No{{/if}}</p>
+        </div>
+      </div>
+    {{else}}
+      <div>No plates found!</div>
+    {{/each}}
+  </div>
+</div>
+
+<script src="/js/menu.js"></script>
