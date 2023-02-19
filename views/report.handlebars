@@ -1,6 +1,16 @@
-{{#each orderedItems as |orderedItem|}}
-  <div>{{stringfy orderedItem}}</div>
-{{else}}
-  <div>No reports found!</div>
+<table><tbody>
+  <tr>
+    <td>Items</td>
+    <td>Quantity</td>
+    <td>Price</td>
+    <td>Total</td>
+    <td>Completed?</td>
+  </tr>
+  {{#each orderedItems as |orderedItem|}}
+  <tr><td>{{menu.item}}</td>
+  <td>{{quantity}}</td>
+  <td>{{menu.price}}</td>
+  {{!-- <td>{{total}}</td> --}}
+  <td>{{#unless order.completed}}Not Completed{{/unless}}</div></tr>
 {{/each}}
-<div>{{isLogged}}</div>
+</tbody></table>
