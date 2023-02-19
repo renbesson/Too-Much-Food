@@ -17,7 +17,7 @@
         <div class="navbar bg-base-100">
           <div class="navbar-start">
             <div class="dropdown">
-              <label tabindex="0" class="btn btn-ghost lg:hidden">
+              <label tabindex="0" class="btn btn-primary btn-ghost lg:hidden">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5"
@@ -86,11 +86,11 @@
           <div class="navbar-end">
             {{#if isLogged}}
               <b>{{first_name}}</b>&nbsp;is logged in&nbsp;&nbsp;
-              <button class="btn" id="logout">logout</button>
+              <button class="btn btn-primary" id="logout">logout</button>
             {{else}}
-              <a class="btn" href="/signin" id="signinBtn">sign in
+              <a class="btn btn-primary" href="/signin" id="signinBtn">sign in
               </a>&nbsp;&nbsp;
-              <a class="btn" href="/signup" id="signupBtn">sign up
+              <a class="btn btn-primary" href="/signup" id="signupBtn">sign up
               </a>
             {{/if}}
           </div>

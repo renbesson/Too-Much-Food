@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./views/*"],
+  content: ["./views/**/*", "./views/*"],
   theme: {
     extend: {},
   },
   daisyui: {
     themes: [
       {
-        mytheme: {
+        myTheme: {
           primary: "rgb(190 99 45)",
 
           secondary: "rgb(227 168 115)",
