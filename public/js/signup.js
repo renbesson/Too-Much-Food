@@ -1,23 +1,33 @@
 const signupFormHandler = async (event) => {
   event.preventDefault();
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const formObj = {
+    first_name: document.getElementById("f-name").value.trim(),
+    last_name: document.getElementById("l-name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    password: document.getElementById("password").value.trim(),
+  };
+  const repassword = document.getElementById("repassword").value.trim();
 
-  if (name && email && password) {
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      body: JSON.stringify({ name, email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
+  if (!Object.values(formObj).includes("")) {
+    if (formObj.password === repassword) {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        body: JSON.stringify(formObj),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    if (response.ok) {
-      document.location.replace("/dashboard");
+      if (response?.ok) {
+        document.location.replace("/");
+      } else {
+        const myJson = await response.json();
+        alert(`${response.statusText}\n${myJson.errors[0].message}`);
+      }
     } else {
-      const myJson = await response.json();
-      alert(`${response.statusText}\n${myJson.errors[0].message}`);
+      alert("Password fields don't match.");
     }
+  } else {
+    alert("Please fill all fields.");
   }
 };
 

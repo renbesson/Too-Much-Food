@@ -1,36 +1,69 @@
-<div class="grid grid-cols-1 gap-2 form-control w-full max-w-xs">
-  <h2 class="text-2xl font-bold">Sign Up</h2>
-  <label class="block">
-    <span class="label-text">What is your name?</span>
-    <input
-      id="name"
-      type="text"
-      placeholder="Nome Sobrenome"
-      class="input input-primary w-full max-w-xs"
-    />
-  </label>
+<div class="py-6 flex flex-col justify-center sm:py-12">
+  <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-amber-700 to-amber-800 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"
+    >
+    </div>
+    <div class="relative px-4 py-10 bg-amber-600 shadow-lg sm:rounded-3xl sm:p-20">
+      <div class="max-w-md mx-auto">
+        <div>
+          <h2 class="text-2xl font-semibold">Sign Up</h2>
+        </div>
+        <div class="divide-y">
+          <form class="py-8 text-base leading-6 space-y-4 sm:leading-7">
+            <label class="block">
+              <span class="label-text">First Name:</span>
+              <input
+                id="f-name"
+                type="text"
+                placeholder="First Name"
+                class="input input-primary w-full max-w-xs"
+              />
+            </label>
+            <label class="block">
+              <span class="label-text">Last Name:</span>
+              <input
+                id="l-name"
+                type="text"
+                placeholder="Last Name"
+                class="input input-primary w-full max-w-xs"
+              />
+            </label>
+            <label class="block">
+              <span class="label-text">Email:</span>
+              <input
+                id="email"
+                type="email"
+                placeholder="name@email.com"
+                class="input input-primary w-full max-w-xs"
+              />
+            </label>
+            <label class="block">
+              <span class="label-text">Password:</span>
+              <input
+                id="password"
+                type="password"
+                placeholder="Password"
+                class="input input-primary w-full max-w-xs"
+              />
+            </label>
+            <label class="block">
+              <span class="label-text">Re-type Password:</span>
+              <input
+                id="repassword"
+                type="password"
+                placeholder="Re-Password"
+                class="input input-primary w-full max-w-xs"
+              />
+            </label>
 
-  <label class="block">
-    <span class="label-text">What is your email?</span>
-    <input
-      id="email"
-      type="email"
-      placeholder="nome@exemplo.com.br"
-      class="input input-primary w-full max-w-xs"
-    />
-  </label>
 
-  <label class="block">
-    <span class="label-text">Type a new password?</span>
-    <input
-      id="password"
-      type="password"
-      placeholder="ExemPloSenHa9#"
-      class="input input-primary w-full max-w-xs"
-    />
-  </label>
-
-  <button class="btn btn-primary" id="signupButton">sign up</button>
+            <button class="btn btn-primary" id="signupButton">sign up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="./js/signup.js"></script>
