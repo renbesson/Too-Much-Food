@@ -11,8 +11,13 @@ Order.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    date: {
+    timestamp: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    date: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },

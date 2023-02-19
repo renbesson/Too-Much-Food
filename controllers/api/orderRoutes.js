@@ -1,14 +1,29 @@
 const router = require('express').Router();
 const { Menu, Order, OrderedItems, User } = require('../../models');
+const auth = require('../../utils/isLogged');
 
 // GET all open orders
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
+  const isLogged = req.session.isLogged;
   try {
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+    });
+    const user = userData.get({ plain: true });
     const orderData = await Order.findAll({
       // JOIN with ordered items
-      include: [{ model: User }, { model: OrderedItems, include: [{ model: Menu }] }]
+      include: [{ model: User }, { model: OrderedItems, include: [{ model: Menu }] }],
+      where: {
+        completed: 0,
+        user_id: user.id
+      }
     });
-    res.status(200).json(orderData);
+    const orders = orderData.map((order) => order.get({ plain: true }));
+    res.render("orders", {
+      orders,
+      ...user,
+      isLogged,
+    });
   } catch (err) {
     res.status(500).json(err);
   }
