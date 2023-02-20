@@ -1,14 +1,113 @@
-{{!-- create two sections --}}
+{{! create two sections }}
 
-{{!-- left section
+{{! left section
 include "Create New Order" button
-see wireframe shared for details --}}
+see wireframe shared for details }}
 
-{{!-- right section
-on clicking the id, the details should display in the form in the left section so it can be edited --}}
-{{#each orders as |order|}}
-  <div>{{id}}</div>
-  <div>{{date}}</div>
-  <div>{{table_no}}</div>
-  <div>{{user.first_name}}</div>
-{{/each}}
+{{! right section
+on clicking the id, the details should display in the form in the left section so it can be edited }}
+<div class="grid sm:grid-cols-1 lg:grid-cols-2">
+
+  <div class="lg:sticky lg:top-4 align-middle">
+    <div class="py-6 flex flex-col justify-center sm:py-12 lg:sticky lg:top-4">
+      <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-amber-700 to-amber-800 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"
+        >
+        </div>
+        <div class="relative px-4 py-10 bg-amber-600 shadow-lg sm:rounded-3xl sm:p-20">
+          <div class="max-w-md mx-auto">
+            <div>
+              <h2 id="createHead" class="text-2xl font-semibold">Create New Order</h2>
+              <h2 style="display:none;" id="editHead" class="text-2xl font-semibold">Modify Order</h2>
+            </div>
+            <div class="divide-y">
+              <form class="py-8 text-base leading-6 space-y-4 sm:leading-7">
+                <label class="block">
+                  <span class="label-text">Table Number:</span>
+                  <input
+                    id="table"
+                    type="number"
+                    placeholder="Table"
+                    class="input input-primary w-full max-w-xs"
+                  />
+                </label>
+                <label class="flex justify-center">
+                  <span class="label-text align-middle">Incomplete</span>
+                  <input id="isComplete" type="checkbox" class="toggle align-middle mx-1" />
+                  <span class="label-text align-middle">Complete</span>
+                </label>
+                <div class="flex justify-evenly">
+                  <button id="createOrderBtn" class="btn btn-primary">Create</button>
+                  <button
+                    style="display:none;"
+                    id="editItemBtn"
+                    class="btn btn-primary"
+                  >Save</button>
+                  <button
+                    style="display:none;"
+                    id="cancelBtn"
+                    class="btn btn-primary"
+                  >Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1">
+    {{#each orders as |order|}}
+      <div class="card card-side glass m-3 shadow-md min-w-max hover:shadow-xl">
+        <div class="card-body grid grid-cols-3">
+          <div class="col-span-1">
+            <h2 class="card-title text-shadow" id="item-{{order.id}}">Order {{order.id}}</h2>
+            <p class="text-shadow">Table#: {{table_no}}<p>
+            <p class="text-shadow">Server: {{user.first_name}} {{user.last_name}}</p>
+            <p id="active-{{order.id}}" class="text-shadow">{{#if completed}}Complete{{else}}Incomplete{{/if}}</p>
+            <div class="card-actions">
+              <button id="edit-{{order.id}}" class="btn btn-primary editBtn mt-2">Edit</button>
+          </div>
+          </div>
+          
+          <div class="grid col-span-2 min-w-[50%]">
+            <div class="overflow-x-auto">
+              <table class="table table-compact w-full">
+                <thead>
+                  <tr>
+                    <th>Item</th> 
+                    <th>Qty</th> 
+                    <th>Subtotal</th> 
+                  </tr>
+                </thead> 
+                <tbody>
+                  {{#each orderedItems as |item|}}
+                    <tr>
+                      <td>{{item.menu.item}}</td> 
+                      <th>{{item.quantity}}</th> 
+                      <td>{{format_currency (sum_subtotal item)}}</td> 
+                    </tr>
+                  {{/each}}
+                </tbody> 
+                <tfoot>
+                  <tr>
+                    <th>Total</th> 
+                    <th></th> 
+                    <th>{{format_currency (sum_total order.orderedItems)}}</th> 
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{else}}
+      <div>No orders found!</div>
+    {{/each}}
+  </div>
+
+</div>
+
+<script defer src="/js/orders.js"></script>

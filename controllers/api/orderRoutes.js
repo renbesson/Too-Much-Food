@@ -1,13 +1,13 @@
-const router = require('express').Router();
-const { Menu, Order, OrderedItems, User } = require('../../models');
-const auth = require('../../utils/isLogged');
+const router = require("express").Router();
+const { Menu, Order, OrderedItems, User } = require("../../models");
+const auth = require("../../utils/isLogged");
 
 // GET all open orders
-router.get('/', auth, async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const isLogged = req.session.isLogged;
   try {
     const userData = await User.findByPk(req.session.user_id, {
-      attributes: { exclude: ['password'] },
+      attributes: { exclude: ["password"] },
     });
     const user = userData.get({ plain: true });
     const orderData = await Order.findAll({
@@ -15,8 +15,8 @@ router.get('/', auth, async (req, res) => {
       include: [{ model: User }, { model: OrderedItems, include: [{ model: Menu }] }],
       where: {
         completed: 0,
-        user_id: user.id
-      }
+        user_id: user.id,
+      },
     });
     const orders = orderData.map((order) => order.get({ plain: true }));
     res.render("orders", {
@@ -30,15 +30,15 @@ router.get('/', auth, async (req, res) => {
 });
 
 // GET a single order
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const orderData = await Order.findByPk(req.params.id, {
       // JOIN with ordered items
-      include: [{ model: User }, { model: OrderedItems, include: [{ model: Menu }] }]
+      include: [{ model: User }, { model: OrderedItems, include: [{ model: Menu }] }],
     });
 
     if (!orderData) {
-      res.status(404).json({ message: 'No order found with this id!' });
+      res.status(404).json({ message: "No order found with this id!" });
       return;
     }
 
@@ -49,12 +49,13 @@ router.get('/:id', async (req, res) => {
 });
 
 // CREATE an order
-router.post('/', async (req, res) => {
-  console.log(req.body);
-  Order.create(req.body)
+router.post("/", async (req, res) => {
+  const user_id = req.session.user_id;
+
+  Order.create({ user_id, ...req.body })
     .then((order) => {
       // create pairings of menu items and quantity included in order through bulk create in the OrderedItems model
-      if (req.body.menuIds.length) {
+      if (req.body.menuIds?.length) {
         console.log(req.body.qty);
         const menuIdArr = req.body.menuIds.map((menu_id, index) => {
           return {
@@ -77,7 +78,7 @@ router.post('/', async (req, res) => {
 });
 
 // UPDATE an order
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   // update product data
   const orders = await Order.update(req.body, {
     where: {
@@ -103,8 +104,10 @@ router.put('/:id', async (req, res) => {
           };
         });
       for (i = 0; i < existingOrderedItemIds.length; i++) {
-        OrderedItems.update(existingOrderedItemIds[i], {where: {id: JSON.stringify(getId[i].id)}});
-      };
+        OrderedItems.update(existingOrderedItemIds[i], {
+          where: { id: JSON.stringify(getId[i].id) },
+        });
+      }
       // create filtered list of new menu_ids
       const newOrderedItems = req.body.menuIds
         .filter((menu_id) => !orderedItemIds.includes(menu_id))

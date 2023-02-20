@@ -10,8 +10,8 @@ const userData = [
   {
     "first_name": "Ren",
     "last_name": "Besson",
-    "email": "ren@xyz.com",
-    "password": "password123"
+    "email": "Ren.Besson@outlook.com",
+    "password": "$2b$10$y9.MmdTKu99Dw1iQ/WwP4OIhvNbsJ9boJjfwE4VMfgqIKH0b4odKS"
   },
   {
     "first_name": "Marie-dale",
