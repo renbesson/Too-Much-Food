@@ -48,4 +48,11 @@ router.get("/signout", (req, res) => {
     res.render("signin");
   });
 
+router.get("/about",(req, res) => {
+  const isLogged = req.session.isLogged;
+  res.render("about", {
+    isLogged,
+  });
+});
+
 module.exports = router;

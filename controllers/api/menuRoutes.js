@@ -6,7 +6,11 @@ const auth = require('../../utils/isLogged');
 router.get('/', auth, async (req, res) => {
   const isLogged = req.session.isLogged;
   try {
-    const menuData = await Menu.findAll();
+    const menuData = await Menu.findAll({
+      order: [
+        ['item', 'ASC'],
+    ],
+    });
     const menuItems = menuData.map((menu) => menu.get({ plain: true }));
     const userData = await User.findByPk(req.session.user_id, {
       attributes: { exclude: ['password'] },
@@ -17,22 +21,6 @@ router.get('/', auth, async (req, res) => {
         ...user,
         isLogged,
       });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// GET a single menu item
-router.get('/:id', auth, async (req, res) => {
-  try {
-    const menuData = await Menu.findByPk(req.params.id);
-
-    if (!menuData) {
-      res.status(404).json({ message: 'No menu item found with this id!' });
-      return;
-    }
-
-    res.status(200).json(menuData);
   } catch (err) {
     res.status(500).json(err);
   }

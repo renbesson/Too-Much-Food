@@ -16,8 +16,10 @@ router.get('/', auth, async (req, res) => {
     attributes: { exclude: ['password'] },
   });
   const user = userData.get({ plain: true });
+  const title = "All Ordered Items";
   res.render("report", {
     orderedItems,
+    title,
     ...user,
     isLogged,
   });
@@ -26,6 +28,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+// GET ordered items for today
 router.get('/today', auth, async (req, res) => {
   const isLogged = req.session.isLogged;
   try {
@@ -42,8 +45,10 @@ router.get('/today', auth, async (req, res) => {
     }}, { model: Menu }]
   });
   const orderedItems = orderedItemsData.map((order) => order.get({ plain: true }));
+  const title = "Todays Ordered Items";
   res.render("report", {
     orderedItems,
+    title,
     ...user,
     isLogged,
   });
