@@ -1,16 +1,17 @@
-<table><tbody>
+<h2 class="card-title text-shadow justify-center">{{title}}</h2>
+<table class="report with-border" width = 100%><tbody>
   <tr>
-    <td>Items</td>
-    <td>Quantity</td>
-    <td>Price</td>
-    {{!-- <td>Total</td> --}}
-    <td>Completed?</td>
+    <th class="with-border">Items</td>
+    <th class="with-border">Quantity</td>
+    <th class="with-border">Price</td>
+    {{!-- <th class="with-border">Total</td> --}}
+    <th class="with-border">Completed?</td>
   </tr>
   {{#each orderedItems as |orderedItem|}}
-  <tr><td>{{menu.item}}</td>
-  <td>{{quantity}}</td>
-  <td>{{menu.price}}</td>
-  {{!-- <td>{{total}}</td> --}}
-  <td>{{#unless order.completed}}Not Completed{{/unless}}</div></tr>
+  <tr><td class="with-border">{{menu.item}}</td>
+  <td class="with-border cntr">{{quantity}}</td>
+  <td class="with-border cntr">{{menu.price}}</td>
+  {{!-- <td class="with-border cntr">{{total}}</td> --}}
+  <td class="with-border cntr">{{#unless order.completed}}Not Completed{{/unless}}</div></tr>
 {{/each}}
 </tbody></table>

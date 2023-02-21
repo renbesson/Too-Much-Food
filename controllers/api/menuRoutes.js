@@ -17,6 +17,12 @@ router.get("/menuJson", async (req, res) => {
 router.get("/", auth, async (req, res) => {
   const isLogged = req.session.isLogged;
   try {
+    const menuData = await Menu.findAll({
+      order: [
+        ['item', 'ASC'],
+    ],
+    });
+    const menuItems = menuData.map((menu) => menu.get({ plain: true }));
     const userData = await User.findByPk(req.session.user_id, {
       attributes: { exclude: ["password"] },
     });
@@ -35,25 +41,6 @@ router.get("/", auth, async (req, res) => {
       ...user,
       isLogged,
     });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// GET a single order
-router.get("/:id", async (req, res) => {
-  try {
-    const orderData = await Order.findByPk(req.params.id, {
-      // JOIN with ordered items
-      include: [{ model: User }, { model: OrderedItems, include: [{ model: Menu }] }],
-    });
-
-    if (!orderData) {
-      res.status(404).json({ message: "No order found with this id!" });
-      return;
-    }
-
-    res.status(200).json(orderData);
   } catch (err) {
     res.status(500).json(err);
   }
