@@ -27,7 +27,7 @@ on clicking the id, the details should display in the form in the left section s
                 <label class="block">
                   <span class="label-text">Table Number:</span>
                   <input
-                    id="table"
+                    id="table_no"
                     type="number"
                     placeholder="Table"
                     class="input input-primary w-full max-w-xs"
@@ -48,10 +48,33 @@ on clicking the id, the details should display in the form in the left section s
                     <input
                       id="qty"
                       type="number"
+                      min="1"
+                      max="20"
+                      value="1"
                       placeholder="Qty"
-                      class="input input-primary w-full"
+                      class="input input-primary w-20"
                     />
-                    <button class="btn btn-primary">add</button>
+                    <button id="addPlateBtn" class="btn btn-primary">add</button>
+                  </div>
+                  <div id="selectedPlatesDiv">
+                    <h3 class="text-xl text-center mt-3">Selected Plates</h3>
+                    <div class="grid col-span-2">
+                     <div class="overflow-x-auto">
+                       <table class="table table-compact w-full">
+                         <thead>
+                           <tr class="grid grid-cols-6">
+                             <th class="col-span-4">Item</th> 
+                             <th class="col-span-1">Qty</th> 
+                             <th class="col-span-1">Delete</th> 
+                           </tr>
+                         </thead> 
+                         <tbody id="selectedPlatesTable">
+                          <tr>
+                          </tr>
+                         </tbody> 
+                       </table>
+                     </div>
+                   </div>
                   </div>
                 </div>
 
@@ -90,7 +113,7 @@ on clicking the id, the details should display in the form in the left section s
           </div>
           </div>
           
-          <div class="grid col-span-2 min-w-[50%]">
+          <div class="grid col-span-2">
             <div class="overflow-x-auto">
               <table class="table table-compact w-full">
                 <thead>
