@@ -49,7 +49,10 @@ router.get("/signout", (req, res) => {
   });
 
 router.get("/about",(req, res) => {
-  res.render("about");
+  const isLogged = req.session.isLogged;
+  res.render("about", {
+    isLogged,
+  });
 });
 
 module.exports = router;
