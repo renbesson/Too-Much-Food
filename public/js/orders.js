@@ -2,6 +2,7 @@
 // Global variables
 /////////////////////////////////////////////////////////////////////
 let platesSelected = [];
+let editMode = false;
 
 /////////////////////////////////////////////////////////////////////
 // Creates a new order
@@ -55,6 +56,7 @@ const getPlates = async () => {
 /////////////////////////////////////////////////////////////////////
 let loadPlates = async () => {
   const plateSelect = document.getElementById('plateSelect');
+  plateSelect.innerHTML = '<option disabled selected>Pick a plate</option>';
   const plates = await getPlates();
 
   plates.forEach((plate) => {
@@ -80,25 +82,16 @@ const addPlate = (event) => {
   const qty = document.getElementById('qty');
 
   const newPlate = document.createElement('tr');
-  const newPlateName = document.createElement('td');
-  const newPlateQty = document.createElement('td');
-  const newPlateDeleteBtn = document.createElement('button');
-
-  newPlate.classList.add('grid', 'grid-cols-6');
-  newPlateName.classList.add('col-span-4');
-  newPlateQty.classList.add('col-span-1');
-  newPlateDeleteBtn.classList.add('btn', 'btn-error', 'col-span-1', 'deletePlateBtn');
-
-  newPlateName.textContent = plateSelect.value;
-  newPlateQty.textContent = qty.value;
-  newPlateDeleteBtn.textContent = 'X';
-
   newPlate.id = `plate-${plateSelect.selectedIndex}`;
-  newPlateDeleteBtn.id = `delete-${plateSelect.selectedIndex}`;
+  newPlate.classList.add('grid', 'grid-cols-6');
 
-  newPlateDeleteBtn.addEventListener('click', deletePlate);
+  const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${plateSelect.selectedIndex}">X</button>`;
 
-  newPlate.append(newPlateName, newPlateQty, newPlateDeleteBtn);
+  newPlate.innerHTML = `
+  <th class="col-span-4">${plateSelect.value}</th> 
+  <th class="col-span-1">${qty.value}</th> 
+  <th class="col-span-1">${deleteBtn}</th> 
+`;
 
   selectedPlatesTable.append(newPlate);
 
@@ -109,6 +102,7 @@ const addPlate = (event) => {
   platesSelected.push({ item_id: plateSelect.selectedIndex, qty: qty.value });
   plateSelect.value = 'Pick a plate';
   qty.value = 1;
+  refreshELs();
 };
 
 document.getElementById('addPlateBtn').addEventListener('click', addPlate);
@@ -138,12 +132,10 @@ const editOrder = (event) => {
 
   const id = event.target.id.split('-')[1];
   const order = JSON.parse(event.target.dataset.order);
-  console.log(order);
 
   const table_no = document.getElementById('table_no');
   const active = document.getElementById('isComplete');
   const plateSelect = document.getElementById(`plate-${id}`);
-  const plateOption = document.getElementById(id);
 
   table_no.value = order.table_no;
   active.checked = order.completed;
@@ -154,29 +146,130 @@ const editOrder = (event) => {
   order.orderedItems.forEach((item) => {
     const orderedItem = document.createElement('tr');
     orderedItem.id = `plate-${item.id}`;
-    const deleteBtn = `<button class="btn btn-error col-span-1 deletePlateBtn" id="delete-${item.id}">X</button>`;
+    const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${item.id}">X</button>`;
 
     orderedItem.classList.add('grid', 'grid-cols-6');
     orderedItem.innerHTML = `
-    <th class="col-span-4">${item.menu.item}</th> 
+    <td class="col-span-4">${item.menu.item}</td> 
     <th class="col-span-1">${item.quantity}</th> 
-    <th class="col-span-1">${deleteBtn}</th> 
+    <td class="col-span-1">${deleteBtn}</td> 
  `;
 
     tableBody.appendChild(orderedItem);
-  });
-  //plateSelect.remove();
-  //plateOption.style.display = 'block';
 
-  //platesSelected = platesSelected.filter((item) => item.item_id != id);
+    // swapSelectOption(item.menu.id);
+    const plateOption = document.getElementById(item.menu.id);
+    plateOption.remove();
+  });
+
+  editModeOn();
   refreshELs();
 };
+
+/////////////////////////////////////////////////////////////////////
+// Swap Edit Mode and Create Mode
+/////////////////////////////////////////////////////////////////////
+const editModeOn = () => {
+  const title = document.getElementById('title');
+  const createBtn = document.getElementById('createOrderBtn');
+  const editBtn = document.getElementById('editOrderBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  if (!editMode) {
+    title.textContent = 'Edit Order';
+    createBtn.style.display = 'none';
+    editBtn.style.display = 'block';
+    cancelBtn.style.display = 'block';
+    editMode = true;
+  }
+};
+
+/////////////////////////////////////////////////////////////////////
+// CANCEL EDIT AND SWITCH BACK TO CREATE FORM
+/////////////////////////////////////////////////////////////////////
+
+const cancelBtnHandler = async (event) => {
+  event.preventDefault();
+
+  document.getElementById('title').innerHTML = 'Create New Order';
+  document.getElementById('editOrderBtn').style.display = 'none';
+  document.getElementById('cancelBtn').style.display = 'none';
+  document.getElementById('createOrderBtn').style.display = 'block';
+
+  document.getElementById('table_no').value = '';
+  document.getElementById('isComplete').checked = false;
+
+  const tableBody = document.getElementById('selectedPlatesTable');
+  tableBody.innerHTML = '';
+};
+
+document.getElementById('cancelBtn').addEventListener('click', () => location.reload());
+
+/////////////////////////////////////////////////////////////////////
+// Event Listener for Save Order Button
+/////////////////////////////////////////////////////////////////////
+
+const saveEditedItem = async (event) => {
+  event.preventDefault();
+
+  const table_no = document.getElementById('table_no').value.trim();
+  const active = document.getElementById('isComplete').checked;
+
+  if (platesSelected.length <= 0) {
+    alert('You need to select at least one plate.');
+    return;
+  }
+  if (table_no) {
+    const response = await fetch(`/api/orders/${event.target}`, {
+      method: 'POST',
+      body: JSON.stringify({ table_no, completed: active, menuIds: platesSelected }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (response.ok) {
+      alert('Order created successfully!');
+      location.reload();
+    } else {
+      alert(`Error ${response.status}\n${response.statusText}`);
+    }
+  }
+
+  if (item && price) {
+    const response = await fetch(`/api/menu/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ item, price, active }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (response.ok) {
+      alert('Item modified successfully!');
+      location.reload();
+    } else {
+      const resJson = await response.json();
+      alert(`${response.statusText}\r${resJson.message}`);
+    }
+  }
+};
+
+document.getElementById('editOrderBtn').addEventListener('click', saveEditedItem);
+
+/* const swapSelectOption = (id) => {
+  const plateSelected = document.getElementById(`plate-${id}`);
+  const plateOption = document.getElementById(id);
+
+  if (plateSelected) {
+    plateSelected.remove();
+    plateOption.style.display = 'block';
+  } else {
+    const plateSelect = document.getElementById('plateSelect');
+    console.log(plateSelect);
+  }
+}; */
 
 /////////////////////////////////////////////////////////////////////
 // Event listener refresher
 /////////////////////////////////////////////////////////////////////
 const refreshELs = () => {
-  console.log('dasd');
   const editBtns = document.querySelectorAll('.editBtn');
   editBtns.forEach((btn) => btn.addEventListener('click', editOrder));
 
