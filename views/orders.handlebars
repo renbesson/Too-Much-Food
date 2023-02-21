@@ -18,37 +18,75 @@ on clicking the id, the details should display in the form in the left section s
         <div class="relative px-4 py-10 bg-amber-600 shadow-lg sm:rounded-3xl sm:p-20">
           <div class="max-w-md mx-auto">
             <div>
-              <h2 id="createHead" class="text-2xl font-semibold">Create New Order</h2>
-              <h2 style="display:none;" id="editHead" class="text-2xl font-semibold">Modify Order</h2>
+              <h2 id="title" class="text-2xl font-semibold">Create New Order</h2>
             </div>
             <div class="divide-y">
               <form class="py-8 text-base leading-6 space-y-4 sm:leading-7">
+                
                 <label class="block">
                   <span class="label-text">Table Number:</span>
                   <input
-                    id="table"
+                    id="table_no"
                     type="number"
                     placeholder="Table"
                     class="input input-primary w-full max-w-xs"
                   />
                 </label>
+                
                 <label class="flex justify-center">
                   <span class="label-text align-middle">Incomplete</span>
                   <input id="isComplete" type="checkbox" class="toggle align-middle mx-1" />
                   <span class="label-text align-middle">Complete</span>
                 </label>
+                
+                <div class="form-control">
+                  <div class="input-group">
+                    <select id="plateSelect" class="select select-bordered">
+                      <option disabled selected>Pick a plate</option>
+                    </select>
+                    <input
+                      id="qty"
+                      type="number"
+                      min="1"
+                      max="20"
+                      value="1"
+                      placeholder="Qty"
+                      class="input input-primary w-20"
+                    />
+                    <button id="addPlateBtn" class="btn btn-primary">add</button>
+                  </div>
+                  <div id="selectedPlatesDiv">
+                    <h3 class="text-xl text-center mt-3">Selected Plates</h3>
+                    <div class="grid col-span-2">
+                     <div class="overflow-x-auto">
+                       <table class="table table-compact w-full">
+                         <thead>
+                           <tr class="grid grid-cols-6">
+                             <th class="col-span-4">Item</th> 
+                             <th class="col-span-1">Qty</th> 
+                             <th class="col-span-1">Delete</th> 
+                           </tr>
+                         </thead> 
+                         <tbody id="selectedPlatesTable">
+                         </tbody> 
+                       </table>
+                     </div>
+                   </div>
+                  </div>
+                </div>
+
                 <div class="flex justify-evenly">
-                  <button id="createOrderBtn" class="btn btn-primary">Create</button>
+                  <button id="createOrderBtn" class="btn btn-primary">create</button>
                   <button
                     style="display:none;"
-                    id="editItemBtn"
+                    id="editOrderBtn"
                     class="btn btn-primary"
-                  >Save</button>
+                  >save</button>
                   <button
                     style="display:none;"
                     id="cancelBtn"
-                    class="btn btn-primary"
-                  >Cancel</button>
+                    class="btn btn-secondary"
+                  >cancel</button>
                 </div>
               </form>
             </div>
@@ -60,19 +98,19 @@ on clicking the id, the details should display in the form in the left section s
 
   <div class="grid grid-cols-1">
     {{#each orders as |order|}}
-      <div class="card card-side glass m-3 shadow-md min-w-max hover:shadow-xl">
+      <div class="card card-side glass m-3 shadow-md min-w-max min-h-min hover:shadow-xl">
         <div class="card-body grid grid-cols-3">
           <div class="col-span-1">
             <h2 class="card-title text-shadow" id="item-{{order.id}}">Order {{order.id}}</h2>
-            <p class="text-shadow">Table#: {{table_no}}<p>
+            <p class="text-shadow">Table#: {{order.table_no}}<p>
             <p class="text-shadow">Server: {{user.first_name}} {{user.last_name}}</p>
-            <p id="active-{{order.id}}" class="text-shadow">{{#if completed}}Complete{{else}}Incomplete{{/if}}</p>
+            <p id="active-{{order.id}}" class="text-shadow">{{#if order.completed}}Complete{{else}}Incomplete{{/if}}</p>
             <div class="card-actions">
-              <button id="edit-{{order.id}}" class="btn btn-primary editBtn mt-2">Edit</button>
+              <button data-order="{{stringfy order}}" id="edit-{{order.id}}" class="btn btn-primary editBtn mt-2">Edit</button>
           </div>
           </div>
           
-          <div class="grid col-span-2 min-w-[50%]">
+          <div class="grid col-span-2">
             <div class="overflow-x-auto">
               <table class="table table-compact w-full">
                 <thead>

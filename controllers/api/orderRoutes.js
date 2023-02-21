@@ -52,16 +52,15 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const user_id = req.session.user_id;
 
-  Order.create({ user_id, ...req.body })
+  Order.create({ user_id, table_no: req.body.table_no, completed: req.body.active })
     .then((order) => {
       // create pairings of menu items and quantity included in order through bulk create in the OrderedItems model
       if (req.body.menuIds?.length) {
-        console.log(req.body.qty);
-        const menuIdArr = req.body.menuIds.map((menu_id, index) => {
+        const menuIdArr = req.body.menuIds.map((item, index) => {
           return {
             order_id: order.id,
-            menu_id,
-            quantity: req.body.qty[index],
+            menu_id: item.item_id,
+            quantity: item.qty,
           };
         });
         console.log(menuIdArr);
@@ -71,9 +70,9 @@ router.post("/", async (req, res) => {
       res.status(200).json(order);
     })
     .then((menuIds) => res.status(200).json(menuIds))
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json(error);
     });
 });
 
