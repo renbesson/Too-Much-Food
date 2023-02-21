@@ -55,12 +55,11 @@
     {{#each menuItems as |menuItem|}}
         <div class="card card-side glass m-3 shadow-md hover:shadow-xl">
         <div class="card-body flex">
-          <h2 class="card-title text-shadow" id="item-{{menuItem.id}}">{{menuItem.item}}</h2>
-          <p id="price-{{menuItem.id}}">Price: {{format_currency menuItem.price}}</p>
-          <p id="active-{{menuItem.id}}">{{#if menuItem.active}}Active{{else}}Inactive{{/if}}</p>
-          <div class="card-actions justify-end">
-            <button id="edit-{{menuItem.id}}" class="btn btn-primary editBtn">Edit</button>
-          </div>
+          <button id="edit-{{menuItem.id}}" class="btn btn-primary editBtn"><p id="item-{{menuItem.id}}">{{menuItem.item}}</p></button>
+          <table width="100%"><tbody><tr>
+            <td><p id="price-{{menuItem.id}}">Price: {{format_currency menuItem.price}}</p></td>
+            <td style="text-align:right"><p id="active-{{menuItem.id}}">{{#if menuItem.active}}Active{{else}}Inactive{{/if}}</p></td>
+          </tr></tbody></table>
         </div>
         </div>
     {{else}}
