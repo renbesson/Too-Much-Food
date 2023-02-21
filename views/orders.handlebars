@@ -69,8 +69,6 @@ on clicking the id, the details should display in the form in the left section s
                            </tr>
                          </thead> 
                          <tbody id="selectedPlatesTable">
-                          <tr>
-                          </tr>
                          </tbody> 
                        </table>
                      </div>
@@ -109,7 +107,7 @@ on clicking the id, the details should display in the form in the left section s
             <p class="text-shadow">Server: {{user.first_name}} {{user.last_name}}</p>
             <p id="active-{{order.id}}" class="text-shadow">{{#if order.completed}}Complete{{else}}Incomplete{{/if}}</p>
             <div class="card-actions">
-              <button id="edit-{{order.id}}" class="btn btn-primary editBtn mt-2">Edit</button>
+              <button data-order="{{stringfy order}}" id="edit-{{order.id}}" class="btn btn-primary editBtn mt-2">Edit</button>
           </div>
           </div>
           
