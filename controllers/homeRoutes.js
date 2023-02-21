@@ -48,11 +48,21 @@ router.get("/signout", (req, res) => {
     res.render("signin");
   });
 
-router.get("/about",(req, res) => {
-  const isLogged = req.session.isLogged;
+router.get("/about", async (req, res) => {
+  const isLogged = req.session.isLogged;try {
+  const userData = await User.findByPk(req.session.user_id, {
+    attributes: { exclude: ['password'] },
+  });
+
+  const user = userData.get({ plain: true });
   res.render("about", {
+    ...user,
     isLogged,
   });
-});
+} catch (error) {
+  res.render("homepage", {
+    isLogged,
+  });
+}});
 
 module.exports = router;
