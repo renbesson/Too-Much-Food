@@ -5,3 +5,40 @@
 .text-shadow {
   text-shadow: -1px 1px 0 #23212c, 1px 1px 0 #23212c, 1px -1px 0 #23212c, -1px -1px 0 #23212c;
 }
+
+.with-border {
+  border: 1px solid;
+}
+
+.report {
+  margin-top: 2rem;
+}
+
+.report tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.report th,
+td {
+  padding: 0.5rem;
+}
+
+.home-block {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin: 0 auto;
+  max-width: 50rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 1rem;
+}
+
+.img-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
+}
+
+.cntr {
+  text-align: center;
+}

@@ -24,12 +24,12 @@
         <li><a href="/api/menu">Menu</a></li>
         <li><a href="/api/orders">Orders</a></li>
         <li tabindex="0">
-          <a class="justify-between">
+          <a>
             Reports
-            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>
+            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>
           </a>
-          <ul class="p-2">
-            <li><a href="/api/reports">All</a></li>
+          <ul class="p-2 bg-amber-800">
+            <li><a href="/api/reports">Alllll</a></li>
             <li><a href="/api/reports/today">Today</a></li>
           </ul>
         </li>
@@ -47,7 +47,7 @@
           Reports
           <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
         </a>
-        <ul class="p-2">
+        <ul class="p-2 bg-amber-800">
           <li><a href="/api/reports">All</a></li>
           <li><a href="/api/reports/today">Today</a></li>
         </ul>
@@ -58,9 +58,9 @@
   <div class="navbar-end">
     {{#if isLogged}}
       <b>{{first_name}}</b>&nbsp;is logged in&nbsp;&nbsp;
-      <button class="btn" id="logout">logout</button>
+      <button class="btn btn-primary" id="logout">logout</button>
     {{else}}
-      <a class="btn" href="/signin" id="signinBtn">sign in
+      <a class="btn btn-secondary" href="/signin" id="signinBtn">sign in
               </a>&nbsp;&nbsp;
               <a class="btn btn-primary" href="/signup" id="signupBtn">sign up
               </a>
