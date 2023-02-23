@@ -2,7 +2,7 @@
 // Global variables
 /////////////////////////////////////////////////////////////////////
 let platesSelected = [];
-let editMode = false;
+let editedOrder = null;
 
 /////////////////////////////////////////////////////////////////////
 // Creates a new order
@@ -30,6 +30,8 @@ const createOrderFormHandler = async (event) => {
     } else {
       alert(`Error ${response.status}\n${response.statusText}`);
     }
+  } else {
+    alert('Please type a table#.');
   }
 };
 
@@ -90,9 +92,9 @@ const addPlate = (event) => {
   const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${id}">X</button>`;
 
   newPlate.innerHTML = `
-  <th class="col-span-4">${plateInput.value}</th> 
+  <td class="col-span-4">${plateInput.value}</td> 
   <th class="col-span-1">${qty.value}</th> 
-  <th class="col-span-1">${deleteBtn}</th> 
+  <td class="col-span-1">${deleteBtn}</td> 
 `;
 
   selectedPlatesTable.append(newPlate);
@@ -113,7 +115,6 @@ document.getElementById('addPlateBtn').addEventListener('click', addPlate);
 // Event listener for Delete plate button
 /////////////////////////////////////////////////////////////////////
 const deletePlate = (event) => {
-  console.log('deleting');
   event.preventDefault();
 
   const id = event.target.id.split('-')[1];
@@ -138,7 +139,8 @@ const editOrder = (event) => {
 
   const table_no = document.getElementById('table_no');
   const active = document.getElementById('isComplete');
-  const plateSelected = document.getElementById(`plate-${id}`);
+
+  editedOrder = id;
 
   table_no.value = order.table_no;
   active.checked = order.completed;
@@ -146,6 +148,7 @@ const editOrder = (event) => {
   const tableBody = document.getElementById('selectedPlatesTable');
   tableBody.innerHTML = '';
 
+  platesSelected = [];
   order.orderedItems.forEach((item) => {
     const orderedItem = document.createElement('tr');
     orderedItem.id = `plate-${item.menu_id}`;
@@ -160,52 +163,36 @@ const editOrder = (event) => {
 
     tableBody.appendChild(orderedItem);
 
-    // swapSelectOption(item.menu.id);
     const plateOption = document.getElementById(`option-${item.menu.id}`);
     plateOption.style.display = 'none';
+
+    platesSelected.push({ id: item.menu_id, qty: item.quantity, item: item.menu.item });
   });
 
-  editModeOn();
+  editOrderOn();
   refreshELs();
 };
 
 /////////////////////////////////////////////////////////////////////
 // Swap Edit Mode and Create Mode
 /////////////////////////////////////////////////////////////////////
-const editModeOn = () => {
+const editOrderOn = () => {
   const title = document.getElementById('title');
   const createBtn = document.getElementById('createOrderBtn');
   const editBtn = document.getElementById('editOrderBtn');
   const cancelBtn = document.getElementById('cancelBtn');
 
-  if (!editMode) {
+  if (editedOrder) {
     title.textContent = 'Edit Order';
     createBtn.style.display = 'none';
     editBtn.style.display = 'block';
     cancelBtn.style.display = 'block';
-    editMode = true;
   }
 };
 
 /////////////////////////////////////////////////////////////////////
 // CANCEL EDIT AND SWITCH BACK TO CREATE FORM
 /////////////////////////////////////////////////////////////////////
-
-const cancelBtnHandler = async (event) => {
-  event.preventDefault();
-
-  document.getElementById('title').innerHTML = 'Create New Order';
-  document.getElementById('editOrderBtn').style.display = 'none';
-  document.getElementById('cancelBtn').style.display = 'none';
-  document.getElementById('createOrderBtn').style.display = 'block';
-
-  document.getElementById('table_no').value = '';
-  document.getElementById('isComplete').checked = false;
-
-  const tableBody = document.getElementById('selectedPlatesTable');
-  tableBody.innerHTML = '';
-};
-
 document.getElementById('cancelBtn').addEventListener('click', () => location.reload());
 
 /////////////////////////////////////////////////////////////////////
@@ -223,8 +210,8 @@ const saveEditedItem = async (event) => {
     return;
   }
   if (table_no) {
-    const response = await fetch(`/api/orders/${event.target}`, {
-      method: 'POST',
+    const response = await fetch(`/api/orders/${editedOrder}`, {
+      method: 'PUT',
       body: JSON.stringify({ table_no, completed: active, menuIds: platesSelected }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -235,22 +222,8 @@ const saveEditedItem = async (event) => {
     } else {
       alert(`Error ${response.status}\n${response.statusText}`);
     }
-  }
-
-  if (item && price) {
-    const response = await fetch(`/api/menu/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ item, price, active }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (response.ok) {
-      alert('Item modified successfully!');
-      location.reload();
-    } else {
-      const resJson = await response.json();
-      alert(`${response.statusText}\r${resJson.message}`);
-    }
+  } else {
+    alert('Please type a table#.');
   }
 };
 
