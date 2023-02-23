@@ -1,11 +1,3 @@
-{{! create two sections }}
-
-{{! left section
-include "Create New Order" button
-see wireframe shared for details }}
-
-{{! right section
-on clicking the id, the details should display in the form in the left section so it can be edited }}
 <div class="grid sm:grid-cols-1 lg:grid-cols-2">
 
   <div class="lg:sticky lg:top-4 align-middle">
@@ -41,8 +33,8 @@ on clicking the id, the details should display in the form in the left section s
                 
                 <div class="form-control">
                   <div class="input-group">
-                    <select id="plateSelect" class="select select-bordered">
-                      <option disabled selected>Pick a plate</option>
+                    <select id="plateInput" class="select select-bordered">
+                      <option id="option-0" disabled selected>Pick a plate</option>
                     </select>
                     <input
                       id="qty"

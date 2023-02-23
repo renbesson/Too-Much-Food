@@ -55,16 +55,16 @@ const getPlates = async () => {
 // Loads all plate options to the select input
 /////////////////////////////////////////////////////////////////////
 let loadPlates = async () => {
-  const plateSelect = document.getElementById('plateSelect');
-  plateSelect.innerHTML = '<option disabled selected>Pick a plate</option>';
+  const plateInput = document.getElementById('plateInput');
+  plateInput.innerHTML = `<option id='option-0' disabled selected>Pick a plate</option>`;
   const plates = await getPlates();
 
   plates.forEach((plate) => {
     const option = document.createElement('option');
-    option.id = plate.id;
+    option.id = `option-${plate.id}`;
     option.text = plate.item;
 
-    plateSelect.add(option);
+    plateInput.add(option);
   });
 };
 
@@ -78,29 +78,31 @@ const addPlate = (event) => {
   event.preventDefault();
 
   const selectedPlatesTable = document.getElementById('selectedPlatesTable');
-  const plateSelect = document.getElementById('plateSelect');
+  const plateInput = document.getElementById('plateInput');
   const qty = document.getElementById('qty');
 
+  const id = plateInput.options[plateInput.selectedIndex].id.split('-')[1];
+
   const newPlate = document.createElement('tr');
-  newPlate.id = `plate-${plateSelect.selectedIndex}`;
+  newPlate.id = `plate-${id}`;
   newPlate.classList.add('grid', 'grid-cols-6');
 
-  const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${plateSelect.selectedIndex}">X</button>`;
+  const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${id}">X</button>`;
 
   newPlate.innerHTML = `
-  <th class="col-span-4">${plateSelect.value}</th> 
+  <th class="col-span-4">${plateInput.value}</th> 
   <th class="col-span-1">${qty.value}</th> 
   <th class="col-span-1">${deleteBtn}</th> 
 `;
 
   selectedPlatesTable.append(newPlate);
 
-  const plateOption = document.getElementById(plateSelect.selectedIndex);
+  const plateOption = document.getElementById(`option-${id}`);
   plateOption.style.display = 'none';
 
   //cleanup
-  platesSelected.push({ item_id: plateSelect.selectedIndex, qty: qty.value });
-  plateSelect.value = 'Pick a plate';
+  platesSelected.push({ id, qty: qty.value, item: plateInput.value });
+  plateInput.value = 'Pick a plate';
   qty.value = 1;
   refreshELs();
 };
@@ -111,17 +113,18 @@ document.getElementById('addPlateBtn').addEventListener('click', addPlate);
 // Event listener for Delete plate button
 /////////////////////////////////////////////////////////////////////
 const deletePlate = (event) => {
+  console.log('deleting');
   event.preventDefault();
 
   const id = event.target.id.split('-')[1];
 
-  const plateSelect = document.getElementById(`plate-${id}`);
-  const plateOption = document.getElementById(id);
+  const plateSelected = document.getElementById(`plate-${id}`);
+  const plateOption = document.getElementById(`option-${id}`);
 
-  plateSelect.remove();
+  plateSelected.remove();
   plateOption.style.display = 'block';
 
-  platesSelected = platesSelected.filter((item) => item.item_id != id);
+  platesSelected = platesSelected.filter((item) => item.id != id);
 };
 
 /////////////////////////////////////////////////////////////////////
@@ -135,7 +138,7 @@ const editOrder = (event) => {
 
   const table_no = document.getElementById('table_no');
   const active = document.getElementById('isComplete');
-  const plateSelect = document.getElementById(`plate-${id}`);
+  const plateSelected = document.getElementById(`plate-${id}`);
 
   table_no.value = order.table_no;
   active.checked = order.completed;
@@ -145,8 +148,8 @@ const editOrder = (event) => {
 
   order.orderedItems.forEach((item) => {
     const orderedItem = document.createElement('tr');
-    orderedItem.id = `plate-${item.id}`;
-    const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${item.id}">X</button>`;
+    orderedItem.id = `plate-${item.menu_id}`;
+    const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${item.menu_id}">X</button>`;
 
     orderedItem.classList.add('grid', 'grid-cols-6');
     orderedItem.innerHTML = `
@@ -158,8 +161,8 @@ const editOrder = (event) => {
     tableBody.appendChild(orderedItem);
 
     // swapSelectOption(item.menu.id);
-    const plateOption = document.getElementById(item.menu.id);
-    plateOption.remove();
+    const plateOption = document.getElementById(`option-${item.menu.id}`);
+    plateOption.style.display = 'none';
   });
 
   editModeOn();
@@ -253,18 +256,39 @@ const saveEditedItem = async (event) => {
 
 document.getElementById('editOrderBtn').addEventListener('click', saveEditedItem);
 
-/* const swapSelectOption = (id) => {
+/////////////////////////////////////////////////////////////////////
+// Swap Options and Selected Plates
+/////////////////////////////////////////////////////////////////////
+const swapPlateOption = (id) => {
   const plateSelected = document.getElementById(`plate-${id}`);
-  const plateOption = document.getElementById(id);
+  const plateOption = document.getElementById(`option-${id}`);
 
   if (plateSelected) {
     plateSelected.remove();
     plateOption.style.display = 'block';
   } else {
-    const plateSelect = document.getElementById('plateSelect');
-    console.log(plateSelect);
+    const selectedPlatesTable = document.getElementById('selectedPlatesTable');
+    const plateInput = document.getElementById('plateInput');
+    const qty = document.getElementById('qty');
+
+    const newPlate = document.createElement('tr');
+    newPlate.id = `plate-${id}`;
+    newPlate.classList.add('grid', 'grid-cols-6');
+
+    const deleteBtn = `<button class="btn-xs btn-error deletePlateBtn" id="delete-${id}">X</button>`;
+
+    newPlate.innerHTML = `
+    <th class="col-span-4">${plateInput.value}</th> 
+    <th class="col-span-1">${qty.value}</th> 
+    <th class="col-span-1">${deleteBtn}</th> 
+  `;
+
+    selectedPlatesTable.append(newPlate);
+
+    const plateOption = document.getElementById(`option-${id}`);
+    plateOption.style.display = 'none';
   }
-}; */
+};
 
 /////////////////////////////////////////////////////////////////////
 // Event listener refresher
