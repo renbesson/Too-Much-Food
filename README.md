@@ -27,3 +27,5 @@ See more of my projects on our Github page [Marie Pais](https://github.com/mdpai
 ## Demo
 
 https://toomuchfood.herokuapp.com
+
+![Screenshot 2023-02-20 at 7 02 08 PM](https://user-images.githubusercontent.com/46001916/221367599-05e787cf-a92d-4a08-930e-fed2a178f6f8.png)
